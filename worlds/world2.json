@@ -1,0 +1,33 @@
+{
+  "width": 8,
+  "height": 14,
+  "rare_items": ["the_one_ring", "anduril_flame_of_the_west"],
+  "goal-condition": { "goal": "AND", "subgoals":
+    [ { "goal": "AND", "subgoals":
+        [ {"goal": "cycles", "quantity": 100 },
+          {"goal": "experience", "quantity": 80000 }
+        ]
+      }, 
+      { "goal": "OR", "subgoals":
+        [ {"goal": "gold", "quantity": 80000 },
+          {"goal": "experience", "quantity": 100000 } 
+        ]
+      }
+    ]
+  },
+  "entities": [
+    {"x": 0, "y": 0, "type": "hero_castle"}
+  ],
+  "path": {
+    "type": "path_tile",
+    "x": 0, "y": 0,
+    "path": [
+      "RIGHT", "RIGHT", "DOWN", "DOWN", "DOWN", "DOWN", "DOWN", "DOWN", "DOWN",
+      "DOWN", "DOWN", "RIGHT", "RIGHT", "RIGHT", "UP", "UP", "UP", "UP", "UP", 
+      "UP", "UP", "UP", "UP", "RIGHT", "RIGHT", "DOWN", "DOWN", "DOWN", "DOWN", 
+      "DOWN", "DOWN", "DOWN", "DOWN", "DOWN", "DOWN", "DOWN", "DOWN", "LEFT", 
+      "LEFT", "LEFT", "LEFT", "LEFT", "LEFT", "LEFT", "UP", "UP", "UP", "UP", 
+      "UP", "UP", "UP", "UP", "UP", "UP", "UP", "UP"
+    ]
+  }
+}

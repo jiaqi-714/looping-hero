@@ -1,0 +1,955 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<!-- TODO = modify and expand the GUI? -->
+<!-- anchorPaneRoot is the background of the main game -->
+
+<AnchorPane fx:id="anchorPaneRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPress" prefHeight="512.0" prefWidth="798.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+   <AnchorPane layoutX="531.0" prefHeight="459.0" prefWidth="265.0">
+      <children>
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#b3e1e342" height="510.0" stroke="#ffffff00" strokeType="INSIDE" width="265.0" />
+         <!-- equippedItems contains the equipment equipped by the character in special slots -->
+         <!-- TODO = extend this to have slots for equipping armour, shields, helmets, and any other equippable items -->
+         <GridPane fx:id="equippedItems" layoutX="123.0" layoutY="68.0" onMouseClicked="#clickEquipped">
+            <columnConstraints>
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints minHeight="10.0" prefHeight="30.0" />
+               <RowConstraints />
+            </rowConstraints>
+            <children>
+               <!-- swordCell is the cell where a sword intended to be equipped will be dragged by the human player -->
+               <ImageView id="swordCell" fx:id="swordCell" layoutX="321.0" layoutY="59.0" GridPane.rowIndex="1">    
+                  <image>
+                     <Image url="@../../images/sword_unequipped.png" />
+                  </image>
+               </ImageView>
+               <!-- shieldCell is the cell where a shield intended to be equipped will be dragged by the human player -->
+               <ImageView id="shieldCell" fx:id="shieldCell" layoutX="385.0" layoutY="59.0" GridPane.columnIndex="2" GridPane.rowIndex="1">    
+                  <image>
+                     <Image url="@../../images/shield_unequipped.png" />
+                  </image>
+               </ImageView>
+               <ImageView id="blankCell" />
+               <ImageView id="helmetCell" fx:id="helmetCell" GridPane.columnIndex="1">
+                  <image>
+                     <Image url="@../../images/helmet_slot.png" />
+                  </image>
+               </ImageView>
+               <ImageView id="bodyCell" fx:id="bodyCell" fitHeight="32.0" fitWidth="32.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <image>
+                     <Image url="@../../images/bodySlot.png" />
+                  </image>
+               </ImageView>
+               <ImageView fitHeight="32.0" fitWidth="57.0" preserveRatio="true" GridPane.columnIndex="2">
+                  <image>
+                     <Image url="@../../images/ring_slot-01.png" />
+                  </image>
+               </ImageView>
+            </children>
+         </GridPane>
+         <Text layoutX="142.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Equipped">
+            <font>
+               <Font name="Times New Roman" size="15.0" />
+            </font>
+         </Text>
+                     <!-- clicking this button returns the human player to the main menu -->
+         <Button fx:id="mainMenuSwitch" layoutX="71.0" layoutY="479.0" onAction="#switchToMainMenu" prefHeight="23.0" prefWidth="123.0" text="Exit to Main Menu">
+            <font>
+               <Font name="Times New Roman" size="13.0" />
+            </font>
+         </Button>
+         <ProgressBar fx:id="healthBar" layoutX="83.0" layoutY="172.0" prefHeight="26.0" prefWidth="152.0" progress="0.0" style="-fx-background-color: red; -fx-background-radius: 5;" />
+         <Label fx:id="hpLevel" layoutX="148.0" layoutY="177.0" text="100" />
+         <Text layoutX="108.0" layoutY="225.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inventory">
+            <font>
+               <Font name="Times New Roman" size="15.0" />
+            </font>
+         </Text>
+         <VBox alignment="CENTER" layoutX="66.0" layoutY="237.0" prefHeight="32.0" prefWidth="32.0">
+            <children>
+            
+                     <!-- unequippedInventory is for unequipped items, which can be dragged into the equipped inventory -->
+               <GridPane fx:id="unequippedInventory" alignment="BOTTOM_RIGHT" onMouseClicked="#clickUnequipped">
+                  <columnConstraints>
+                     <ColumnConstraints />
+                  </columnConstraints>
+                  <rowConstraints>
+                     <RowConstraints />
+                  </rowConstraints>
+               </GridPane>
+            </children>
+         </VBox>
+         <Button fx:id="playSpeed" layoutX="71.0" layoutY="445.0" mnemonicParsing="false" onAction="#changePlaySpeed" prefHeight="25.0" prefWidth="35.0" text="x1">
+            <font>
+               <Font name="Times New Roman" size="13.0" />
+            </font></Button>
+         <Button fx:id="playMusic" ellipsisString="" layoutX="160.0" layoutY="445.0" mnemonicParsing="false" onAction="#playMusic" prefHeight="26.0" prefWidth="13.0">
+            <font>
+               <Font name="Times New Roman" size="13.0" />
+            </font>
+            <graphic>
+               <ImageView fitHeight="16.0" fitWidth="15.0" preserveRatio="true">
+                  <image>
+                     <Image url="@../../images/music.png" />
+                  </image>
+               </ImageView>
+            </graphic></Button>
+         <Button layoutX="115.0" layoutY="445.0" maxHeight="25.0" maxWidth="35.0" minHeight="25.0" minWidth="35.0" mnemonicParsing="false" onAction="#switchToSettingsMenu" prefHeight="25.0" prefWidth="35.0">
+            <font>
+               <Font name="Times New Roman" size="13.0" />
+            </font>
+            <graphic>
+               <ImageView fitHeight="21.0" fitWidth="17.0" preserveRatio="true">
+                  <image>
+                     <Image url="@../../images/settings.png" />
+                  </image>
+               </ImageView>
+            </graphic>
+         </Button>
+         <Pane layoutX="16.0" layoutY="391.0" prefHeight="46.0" prefWidth="233.0" style="-fx-border-radius: 8; -fx-background-color: #ffffff; -fx-border-color: #c3c3c3; -fx-background-radius: 8;">
+            <children>
+               <Label fx:id="liveLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="5.0" layoutY="4.0" prefHeight="38.0" prefWidth="223.0" text="[Game updates here]" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS" wrapText="true">
+                  <font>
+                     <Font name="Times New Roman" size="13.0" />
+                  </font>
+               </Label>
+            </children>
+         </Pane>
+         <GridPane layoutX="18.0" layoutY="28.0" prefHeight="129.0" prefWidth="107.0">
+           <columnConstraints>
+             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+           </columnConstraints>
+           <rowConstraints>
+             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+           </rowConstraints>
+            <children>
+               <ImageView id="swordCell" fitHeight="25.0" fitWidth="28.0" GridPane.rowIndex="3">
+                  <image>
+                     <Image url="@../../images/heavy_bullets.png" />
+                  </image>
+               </ImageView>
+               <Label fx:id="numBullets" text="x0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                  <font>
+                     <Font name="Times New Roman" size="13.0" />
+                  </font>
+               </Label>
+               <Label fx:id="goldBalance" text="0" GridPane.columnIndex="1">
+                  <font>
+                     <Font name="Times New Roman" size="13.0" />
+                  </font>
+               </Label>
+               <ImageView fitHeight="25.0" fitWidth="28.0" preserveRatio="true" GridPane.rowIndex="2">
+                  <image>
+                     <Image url="@../../images/doggiecoin.png" />
+                  </image>
+               </ImageView>
+               <Label fx:id="numDoggieCoins" text="x0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <font>
+                     <Font name="Times New Roman" size="13.0" />
+                  </font>
+               </Label>
+               <ImageView id="swordCell" fitHeight="25.0" fitWidth="28.0">
+                  <image>
+                     <Image url="@../../images/gold_pile.png" />
+                  </image>
+               </ImageView>
+               <ImageView id="swordCell" fitHeight="25.0" fitWidth="28.0" GridPane.rowIndex="1">
+                  <image>
+                     <Image url="@../../images/brilliant_blue_new.png" />
+                  </image>
+               </ImageView>
+               <Label fx:id="numPotions" text="x0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <font>
+                     <Font name="Times New Roman" size="13.0" />
+                  </font>
+               </Label>
+            </children>
+         </GridPane>
+         <GridPane layoutX="16.0" layoutY="169.0" prefHeight="32.0" prefWidth="58.0">
+           <columnConstraints>
+             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+           </columnConstraints>
+           <rowConstraints>
+             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+           </rowConstraints>
+            <children>
+               <ImageView id="swordCell" fitHeight="17.0" fitWidth="20.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  <image>
+                     <Image url="@../../images/heart.png" />
+                  </image>
+               </ImageView>
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="HP" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            </children>
+         </GridPane>
+      </children>
+   </AnchorPane>
+   <AnchorPane prefHeight="500.0" prefWidth="214.0">
+      <children>
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#b3e1e35e" height="510.0" layoutX="-9.0" stroke="TRANSPARENT" strokeType="INSIDE" width="223.0" />
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#339cffba" height="204.0" layoutX="-1.0" layoutY="308.0" stroke="BLACK" strokeType="INSIDE" width="214.0" />
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Allies">
+            <font>
+               <Font name="Times New Roman" size="15.0" />
+            </font>
+         </Text>
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Attack" />
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Defense" />
+         <Text layoutX="45.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Character Progress">
+            <font>
+               <Font name="Times New Roman" size="15.0" />
+            </font>
+         </Text>
+        <ImageView fx:id="traitPic" layoutX="13.0" layoutY="240.0" preserveRatio="true">
+            <image>
+               <Image url="@../../images/image_just_black_tiny.png" />
+            </image>
+         </ImageView>
+         <GridPane layoutX="18.0" layoutY="76.0" prefHeight="62.0" prefWidth="180.0">
+           <columnConstraints>
+             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+           </columnConstraints>
+           <rowConstraints>
+             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+           </rowConstraints>
+            <children>
+               <ImageView fitHeight="25.0" fitWidth="28.0" GridPane.rowIndex="1">
+                  <image>
+                     <Image url="@../../images/goldskull.png" />
+                  </image>
+               </ImageView>
+               <ImageView id="swordCell" fitHeight="25.0" fitWidth="28.0">
+                  <image>
+                     <Image url="@../../images/heros_castle.png" />
+                  </image>
+               </ImageView>
+               <Label fx:id="cycleWin1" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               <Label fx:id="cycleWin" text="0" GridPane.columnIndex="1" />
+               <ImageView id="swordCell" fitHeight="25.0" fitWidth="28.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                  <image>
+                     <Image url="@../../images/gold_pile.png" />
+                  </image>
+               </ImageView>
+               <Label fx:id="goldWin" text="0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+               <ImageView fitHeight="25.0" fitWidth="28.0" GridPane.columnIndex="2">
+                  <image>
+                     <Image url="@../../images/star.png" />
+                  </image>
+               </ImageView>
+               <Label fx:id="expWin" text="0" GridPane.columnIndex="3" />
+            </children>
+         </GridPane>
+         <Button fx:id="displayGoals" layoutX="61.0" layoutY="191.0" mnemonicParsing="false" onAction="#displayGoals" text="Display Goals">
+            <font>
+               <Font name="Times New Roman" size="13.0" />
+            </font>
+         </Button>
+         <GridPane fx:id="aliveAllies" layoutX="6.0" layoutY="352.0" prefHeight="156.0" prefWidth="192.0">
+           <columnConstraints>
+             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+           </columnConstraints>
+           <rowConstraints>
+             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+           </rowConstraints>
+          </GridPane>
+         <Text layoutX="82.0" layoutY="331.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Allies" textAlignment="CENTER">
+            <font>
+               <Font name="Times New Roman" size="15.0" />
+            </font>
+         </Text>
+         <Button layoutX="132.0" layoutY="244.0" mnemonicParsing="false" onAction="#revealTrait" text="Pick Trait" />
+         <Label fx:id="traitText" layoutX="56.0" layoutY="247.0" prefHeight="18.0" prefWidth="76.0" text="Trait">
+            <font>
+               <Font name="Times New Roman" size="15.0" />
+            </font>
+         </Label>
+         <Text layoutX="20.0" layoutY="172.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Game Mode:">
+            <font>
+               <Font name="Times New Roman" size="15.0" />
+            </font>
+         </Text>
+         <Label fx:id="gameMode" layoutX="109.0" layoutY="158.0" text="[Game Mode]">
+            <font>
+               <Font name="Times New Roman" size="15.0" />
+            </font>
+         </Label>
+      </children>
+   </AnchorPane>
+
+   <!-- this BorderPane contains the ground under the cards and the cards -->
+   <BorderPane layoutX="248.0" layoutY="463.0">
+      <bottom>
+            <!-- cards GridPane holds the cards which can be used on the map -->
+            <GridPane fx:id="cards">
+               <columnConstraints>
+                  <ColumnConstraints />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints />
+               </rowConstraints>
+            <children>
+               <ImageView id="blankCell">
+                  <image>
+                     <Image url="@../../images/image_just_black_tiny.png" />
+                  </image>
+               </ImageView>
+            </children>
+            </GridPane>
+      </bottom>
+   </BorderPane>
+    <!-- squares contains the path, buildings, character, and enemies -->
+   <GridPane fx:id="squares" layoutX="248.0" layoutY="19.0" onMouseClicked="#clickSnipe">
+      <columnConstraints>
+         <ColumnConstraints />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints />
+      </rowConstraints>
+      <children>
+         <ImageView id="blankCell">
+            <image>
+               <Image url="@../../images/image_just_black_tiny.png" />
+            </image>
+         </ImageView>
+      </children>
+   </GridPane>
+    <AnchorPane fx:id="herosCastlePane" layoutX="209.0" layoutY="-2.0" prefHeight="522.0" prefWidth="322.0">
+      <children>
+         <ScrollPane hbarPolicy="NEVER" layoutY="2.0" prefHeight="540.0" prefWidth="322.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="2.0">
+            <content>
+               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1008.0" prefWidth="318.0">
+                  <children>
+                     <Text layoutX="75.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hero's Castle Shop">
+                        <font>
+                           <Font name="Times New Roman" size="22.0" />
+                        </font>
+                     </Text>
+                     <Button fx:id="exitCastle" layoutX="265.0" layoutY="14.0" mnemonicParsing="false" onAction="#switchFromShop" text="X" />
+                     <GridPane hgap="5.0" layoutX="17.0" layoutY="117.0" prefHeight="132.0" prefWidth="285.0">
+                       <columnConstraints>
+                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="106.0" minWidth="10.0" prefWidth="71.0" />
+                           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="106.0" minWidth="10.0" prefWidth="82.0" />
+                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="117.0" minWidth="10.0" prefWidth="109.0" />
+                           <ColumnConstraints hgrow="SOMETIMES" maxWidth="112.0" minWidth="10.0" prefWidth="64.0" />
+                       </columnConstraints>
+                       <rowConstraints>
+                         <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="8.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                         <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                         <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="8.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                       </rowConstraints>
+                        <children>
+                           <ImageView id="swordCell" fitHeight="36.0" fitWidth="36.0" GridPane.halignment="CENTER" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+                              <image>
+                                 <Image url="@../../images/basic_sword.png" />
+                              </image>
+                              <GridPane.margin>
+                                 <Insets left="4.0" />
+                              </GridPane.margin>
+                           </ImageView>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sword" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+                              <font>
+                                 <Font name="Times New Roman" size="16.0" />
+                              </font>
+                              <GridPane.margin>
+                                 <Insets />
+                              </GridPane.margin>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="9" textAlignment="CENTER" wrappingWidth="55.400390625" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                              <font>
+                                 <Font name="Times New Roman" size="15.0" />
+                              </font>
+                              <GridPane.margin>
+                                 <Insets />
+                              </GridPane.margin>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\$100" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                              <font>
+                                 <Font name="Times New Roman" size="15.0" />
+                              </font>
+                              <GridPane.margin>
+                                 <Insets />
+                              </GridPane.margin>
+                           </Text>
+                           <Button fx:id="Sword" mnemonicParsing="false" onAction="#buyItem" text="Buy" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowSpan="2" />
+                           <ImageView fitHeight="36.0" fitWidth="36.0" GridPane.halignment="CENTER" GridPane.rowIndex="9" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+                              <image>
+                                 <Image url="@../../images/staff.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView fitHeight="36.0" fitWidth="36.0" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+                              <image>
+                                 <Image url="@../../images/stake.png" />
+                              </image>
+                           </ImageView>
+                           <Button fx:id="Stake" mnemonicParsing="false" onAction="#buyItem" text="Buy" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.rowSpan="2" />
+                           <Button fx:id="Staff" mnemonicParsing="false" onAction="#buyItem" text="Buy" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="9" GridPane.rowSpan="2" />
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stake" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.rowSpan="2">
+                              <font>
+                                 <Font name="Times New Roman" size="16.0" />
+                              </font>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Staff" GridPane.columnIndex="1" GridPane.rowIndex="9" GridPane.rowSpan="2">
+                              <font>
+                                 <Font name="Times New Roman" size="16.0" />
+                              </font>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="12" textAlignment="CENTER" wrappingWidth="55.400390625" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+                              <font>
+                                 <Font name="Times New Roman" size="15.0" />
+                              </font>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\$45" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                              <font>
+                                 <Font name="Times New Roman" size="15.0" />
+                              </font>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\$80" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="9" GridPane.valignment="CENTER">
+                              <font>
+                                 <Font name="Times New Roman" size="15.0" />
+                              </font>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="4" textAlignment="CENTER" wrappingWidth="55.400390625" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="10">
+                              <font>
+                                 <Font name="Times New Roman" size="15.0" />
+                              </font>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Inflicts 9 damage on all enemies." GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                              <font>
+                                 <Font name="Times New Roman" size="14.0" />
+                              </font>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Inflicts 6 damage on all enemies." GridPane.rowIndex="6">
+                              <font>
+                                 <Font name="Times New Roman" size="14.0" />
+                              </font>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Inflicts 4 damage on all enemies." GridPane.rowIndex="11">
+                              <font>
+                                 <Font name="Times New Roman" size="14.0" />
+                              </font>
+                           </Text>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" GridPane.columnIndex="2" GridPane.rowIndex="9">
+                              <image>
+                                 <Image url="@../../images/gold_pile.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" GridPane.columnIndex="2">
+                              <image>
+                                 <Image url="@../../images/gold_pile.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                              <image>
+                                 <Image url="@../../images/gold_pile.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" GridPane.columnIndex="2" GridPane.rowIndex="10">
+                              <image>
+                                 <Image url="@../../images/basic_sword.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                              <image>
+                                 <Image url="@../../images/basic_sword.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                              <image>
+                                 <Image url="@../../images/basic_sword.png" />
+                              </image>
+                           </ImageView>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Inflicts 6 additional damage on vampires." GridPane.rowIndex="7">
+                              <font>
+                                 <Font name="Times New Roman" size="14.0" />
+                              </font>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Has a 20% chance to transform an enemy into an allied soldier " wrappingWidth="282.2080078125" GridPane.rowIndex="12" GridPane.valignment="TOP">
+                              <font>
+                                 <Font name="Times New Roman" size="14.0" />
+                              </font>
+                           </Text>
+                        </children>
+                     </GridPane>
+                     <Text layoutX="126.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Weapons" textAlignment="CENTER">
+                        <font>
+                           <Font name="Times New Roman" size="18.0" />
+                        </font>
+                     </Text>
+                     <GridPane hgap="5.0" layoutX="17.0" layoutY="463.0" prefHeight="132.0" prefWidth="285.0">
+                        <columnConstraints>
+                           <ColumnConstraints hgrow="SOMETIMES" maxWidth="106.0" minWidth="10.0" prefWidth="71.0" />
+                           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="106.0" minWidth="10.0" prefWidth="82.0" />
+                           <ColumnConstraints hgrow="SOMETIMES" maxWidth="117.0" minWidth="10.0" prefWidth="109.0" />
+                           <ColumnConstraints hgrow="SOMETIMES" maxWidth="112.0" minWidth="10.0" prefWidth="64.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                           <RowConstraints />
+                           <RowConstraints />
+                           <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="8.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="8.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <children>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Body" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+                              <font>
+                                 <Font name="Times New Roman" size="16.0" />
+                              </font>
+                              <GridPane.margin>
+                                 <Insets />
+                              </GridPane.margin>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\$65" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                              <font>
+                                 <Font name="Times New Roman" size="15.0" />
+                              </font>
+                              <GridPane.margin>
+                                 <Insets />
+                              </GridPane.margin>
+                           </Text>
+                           <Button fx:id="BodyArmour" mnemonicParsing="false" onAction="#buyItem" text="Buy" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.rowSpan="2" />
+                           <Button fx:id="Shield" mnemonicParsing="false" onAction="#buyItem" text="Buy" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="6" GridPane.rowSpan="2" />
+                           <Button fx:id="Helmet" mnemonicParsing="false" onAction="#buyItem" text="Buy" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="11" GridPane.rowSpan="2" />
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Shield" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.rowSpan="2">
+                              <font>
+                                 <Font name="Times New Roman" size="16.0" />
+                              </font>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Helmet" GridPane.columnIndex="1" GridPane.rowIndex="11" GridPane.rowSpan="2">
+                              <font>
+                                 <Font name="Times New Roman" size="16.0" />
+                              </font>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\$30" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+                              <font>
+                                 <Font name="Times New Roman" size="15.0" />
+                              </font>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\$60" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="11">
+                              <font>
+                                 <Font name="Times New Roman" size="15.0" />
+                              </font>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Enemy attack is halved." GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                              <font>
+                                 <Font name="Times New Roman" size="14.0" />
+                              </font>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- 60% chance to block an enemy's attack." GridPane.rowIndex="8">
+                              <font>
+                                 <Font name="Times New Roman" size="14.0" />
+                              </font>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Enemy attacks reduced by 2." GridPane.rowIndex="13">
+                              <font>
+                                 <Font name="Times New Roman" size="14.0" />
+                              </font>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Armour" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                              <font>
+                                 <Font name="Times New Roman" size="16.0" />
+                              </font>
+                           </Text>
+                           <ImageView GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+                              <image>
+                                 <Image url="@../../images/armour.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView GridPane.halignment="CENTER" GridPane.rowIndex="11" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+                              <image>
+                                 <Image url="@../../images/helmet.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+                              <image>
+                                 <Image url="@../../images/shield.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" GridPane.columnIndex="2" GridPane.rowIndex="11">
+                              <image>
+                                 <Image url="@../../images/gold_pile.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                              <image>
+                                 <Image url="@../../images/gold_pile.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
+                              <image>
+                                 <Image url="@../../images/gold_pile.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" GridPane.columnIndex="2" GridPane.rowIndex="12">
+                              <image>
+                                 <Image url="@../../images/armour.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                              <image>
+                                 <Image url="@../../images/armour.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" GridPane.columnIndex="2" GridPane.rowIndex="7">
+                              <image>
+                                 <Image url="@../../images/armour.png" />
+                              </image>
+                           </ImageView>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Character's attack is halved." wrappingWidth="164.6162109375" GridPane.rowIndex="14">
+                              <font>
+                                 <Font name="Times New Roman" size="14.0" />
+                              </font>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- 60% chance to block an enemy's attack." GridPane.rowIndex="9">
+                              <font>
+                                 <Font name="Times New Roman" size="14.0" />
+                              </font>
+                           </Text>
+                        </children>
+                     </GridPane>
+                     <Text layoutX="131.0" layoutY="447.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Armour" textAlignment="CENTER">
+                        <font>
+                           <Font name="Times New Roman" size="18.0" />
+                        </font>
+                     </Text>
+                     <GridPane hgap="5.0" layoutX="17.0" layoutY="785.0" prefHeight="62.0" prefWidth="285.0">
+                        <columnConstraints>
+                           <ColumnConstraints hgrow="SOMETIMES" maxWidth="106.0" minWidth="10.0" prefWidth="71.0" />
+                           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="106.0" minWidth="10.0" prefWidth="82.0" />
+                           <ColumnConstraints hgrow="SOMETIMES" maxWidth="117.0" minWidth="10.0" prefWidth="109.0" />
+                           <ColumnConstraints hgrow="SOMETIMES" maxWidth="112.0" minWidth="10.0" prefWidth="64.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                           <RowConstraints />
+                           <RowConstraints />
+                           <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <children>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Health" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+                              <font>
+                                 <Font name="Times New Roman" size="16.0" />
+                              </font>
+                              <GridPane.margin>
+                                 <Insets />
+                              </GridPane.margin>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\$20" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                              <font>
+                                 <Font name="Times New Roman" size="15.0" />
+                              </font>
+                              <GridPane.margin>
+                                 <Insets />
+                              </GridPane.margin>
+                           </Text>
+                           <Button fx:id="HealthPotion" mnemonicParsing="false" onAction="#buyItem" text="Buy" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.rowSpan="2" />
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Refills the Character's health completely." GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                              <font>
+                                 <Font name="Times New Roman" size="14.0" />
+                              </font>
+                           </Text>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Potion" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                              <font>
+                                 <Font name="Times New Roman" size="16.0" />
+                              </font>
+                           </Text>
+                           <ImageView GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+                              <image>
+                                 <Image url="@../../images/brilliant_blue_new.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                              <image>
+                                 <Image url="@../../images/gold_pile.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView id="swordCell" fitHeight="17.0" fitWidth="20.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                              <image>
+                                 <Image url="@../../images/heart.png" />
+                              </image>
+                           </ImageView>
+                        </children>
+                     </GridPane>
+                     <Text layoutX="131.0" layoutY="769.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Healing" textAlignment="CENTER">
+                        <font>
+                           <Font name="Times New Roman" size="18.0" />
+                        </font>
+                     </Text>
+                     <Text layoutX="91.0" layoutY="904.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Doggiecoin Market" textAlignment="CENTER">
+                        <font>
+                           <Font name="Times New Roman" size="18.0" />
+                        </font>
+                     </Text>
+                     <ImageView fitHeight="38.0" fitWidth="35.0" layoutX="30.0" layoutY="927.0" preserveRatio="true">
+                        <image>
+                           <Image url="@../../images/doggiecoin.png" />
+                        </image>
+                     </ImageView>
+                     <Button layoutX="248.0" layoutY="933.0" mnemonicParsing="false" onAction="#sellDoggieCoin" prefHeight="25.0" prefWidth="40.0" text="Sell" />
+                     <Label fx:id="todaysDoggiePrice" alignment="CENTER" contentDisplay="CENTER" layoutX="172.0" layoutY="919.0" prefHeight="26.0" prefWidth="58.0" text="\$0" textOverrun="WORD_ELLIPSIS" wrapText="true">
+                        <font>
+                           <Font name="Times New Roman" size="15.0" />
+                        </font>
+                     </Label>
+                     <Label alignment="CENTER" contentDisplay="CENTER" layoutX="91.0" layoutY="918.0" prefHeight="26.0" prefWidth="91.0" text="Today's Price:" textAlignment="RIGHT" textOverrun="WORD_ELLIPSIS">
+                        <font>
+                           <Font name="Times New Roman" size="15.0" />
+                        </font>
+                     </Label>
+                     <TextField fx:id="amountDoggieSell" layoutX="91.0" layoutY="950.0" prefHeight="23.0" prefWidth="123.0" promptText="Enter amount to sell">
+                        <font>
+                           <Font name="Times New Roman" size="13.0" />
+                        </font>
+                     </TextField>
+                  </children>
+               </AnchorPane>
+            </content>
+         </ScrollPane>
+      </children>
+   </AnchorPane>
+    <AnchorPane fx:id="traitsSelection" prefHeight="522.0" prefWidth="798.0" visible="false">
+      <children>
+         <Pane layoutX="84.0" layoutY="32.0" prefHeight="459.0" prefWidth="631.0">
+            <children>
+               <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="468.0" stroke="BLACK" strokeType="INSIDE" width="631.0" />
+               <GridPane gridLinesVisible="true" layoutY="37.0" prefHeight="431.0" prefWidth="631.0">
+                 <columnConstraints>
+                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                 </columnConstraints>
+                 <rowConstraints>
+                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                 </rowConstraints>
+                  <children>
+                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                        <children>
+                           <Region prefHeight="153.0" prefWidth="22.0" />
+                           <ImageView fitHeight="84.0" fitWidth="86.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@../../images/Healthpack.png" />
+                              </image>
+                           </ImageView>
+                           <VBox alignment="CENTER" prefHeight="153.0" prefWidth="203.0">
+                              <children>
+                                 <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="26.0" prefWidth="69.0" text="Healer">
+                                    <font>
+                                       <Font name="Times New Roman" size="18.0" />
+                                    </font>
+                                 </Label>
+                                 <Label alignment="CENTER" prefHeight="64.0" prefWidth="195.0" text="Whenever you complete a cycle, gain 5 HP." textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+                                    <font>
+                                       <Font name="Times New Roman" size="13.0" />
+                                    </font></Label>
+                                 <Button fx:id="Healer" mnemonicParsing="false" onAction="#pickTrait" text="Pick Trait">
+                                    <font>
+                                       <Font name="Times New Roman" size="13.0" />
+                                    </font></Button>
+                              </children>
+                           </VBox>
+                        </children>
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" prefHeight="129.0" prefWidth="315.0" GridPane.columnIndex="1">
+                        <children>
+                           <Region prefHeight="153.0" prefWidth="23.0" />
+                           <ImageView fitHeight="84.0" fitWidth="86.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@../../images/sword.png" />
+                              </image>
+                           </ImageView>
+                           <VBox alignment="CENTER" prefHeight="153.0" prefWidth="203.0">
+                              <children>
+                                 <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="26.0" prefWidth="69.0" text="Stabby">
+                                    <font>
+                                       <Font name="Times New Roman" size="18.0" />
+                                    </font>
+                                 </Label>
+                                 <Label alignment="CENTER" prefHeight="64.0" prefWidth="195.0" text="Deal 1 extra damage to every enemy when in combat." textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+                                    <font>
+                                       <Font name="Times New Roman" size="13.0" />
+                                    </font></Label>
+                                 <Button fx:id="Stabby" mnemonicParsing="false" onAction="#pickTrait" text="Pick Trait">
+                                    <font>
+                                       <Font name="Times New Roman" size="13.0" />
+                                    </font></Button>
+                              </children>
+                           </VBox>
+                        </children>
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+                        <children>
+                           <Region prefHeight="153.0" prefWidth="22.0" />
+                           <ImageView fitHeight="84.0" fitWidth="86.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@../../images/turtle.png" />
+                              </image>
+                           </ImageView>
+                           <VBox alignment="CENTER" prefHeight="153.0" prefWidth="203.0">
+                              <children>
+                                 <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="26.0" prefWidth="69.0" text="Turtle">
+                                    <font>
+                                       <Font name="Times New Roman" size="18.0" />
+                                    </font>
+                                 </Label>
+                                 <Label alignment="CENTER" prefHeight="64.0" prefWidth="195.0" text="Reduce all incoming damage by 1." textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+                                    <font>
+                                       <Font name="Times New Roman" size="13.0" />
+                                    </font></Label>
+                                 <Button fx:id="Turtle" mnemonicParsing="false" onAction="#pickTrait" text="Pick Trait">
+                                    <font>
+                                       <Font name="Times New Roman" size="13.0" />
+                                    </font></Button>
+                              </children>
+                           </VBox>
+                        </children>
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <children>
+                           <Region prefHeight="153.0" prefWidth="23.0" />
+                           <ImageView fitHeight="84.0" fitWidth="86.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@../../images/bigspender.png" />
+                              </image>
+                           </ImageView>
+                           <VBox alignment="CENTER" prefHeight="153.0" prefWidth="203.0">
+                              <children>
+                                 <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="131.0" text="Big Spender">
+                                    <font>
+                                       <Font name="Times New Roman" size="18.0" />
+                                    </font>
+                                 </Label>
+                                 <Label prefHeight="64.0" prefWidth="195.0" text="Whenever you complete a cycle, gain 10 gold." textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+                                    <font>
+                                       <Font name="Times New Roman" size="13.0" />
+                                    </font></Label>
+                                 <Button fx:id="BigSpender" mnemonicParsing="false" onAction="#pickTrait" text="Pick Trait">
+                                    <font>
+                                       <Font name="Times New Roman" size="13.0" />
+                                    </font></Button>
+                              </children>
+                           </VBox>
+                        </children>
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
+                        <children>
+                           <Region prefHeight="153.0" prefWidth="23.0" />
+                           <ImageView fitHeight="84.0" fitWidth="86.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@../../images/librarian.png" />
+                              </image>
+                           </ImageView>
+                           <VBox alignment="CENTER" prefHeight="153.0" prefWidth="203.0">
+                              <children>
+                                 <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="26.0" prefWidth="69.0" text="Librarian">
+                                    <font>
+                                       <Font name="Times New Roman" size="18.0" />
+                                    </font>
+                                 </Label>
+                                 <Label prefHeight="64.0" prefWidth="195.0" text="Receive double experience from all sources." textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+                                    <font>
+                                       <Font name="Times New Roman" size="13.0" />
+                                    </font></Label>
+                                 <Button fx:id="Librarian" mnemonicParsing="false" onAction="#pickTrait" text="Pick Trait">
+                                    <font>
+                                       <Font name="Times New Roman" size="13.0" />
+                                    </font></Button>
+                              </children>
+                           </VBox>
+                        </children>
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <children>
+                           <Region prefHeight="153.0" prefWidth="20.0" />
+                           <ImageView fitHeight="84.0" fitWidth="86.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@../../images/random.png" />
+                              </image>
+                           </ImageView>
+                           <VBox alignment="CENTER" prefHeight="153.0" prefWidth="203.0">
+                              <children>
+                                 <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="76.0" text="Random">
+                                    <font>
+                                       <Font name="Times New Roman" size="18.0" />
+                                    </font>
+                                 </Label>
+                                 <Label alignment="CENTER" prefHeight="64.0" prefWidth="195.0" text="Obtain a random trait." textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+                                    <font>
+                                       <Font name="Times New Roman" size="13.0" />
+                                    </font></Label>
+                                 <Button fx:id="Random" mnemonicParsing="false" onAction="#pickTrait" text="Pick Trait">
+                                    <font>
+                                       <Font name="Times New Roman" size="13.0" />
+                                    </font></Button>
+                              </children>
+                           </VBox>
+                        </children>
+                     </HBox>
+                  </children>
+               </GridPane>
+               <Label layoutX="277.0" text="Traits">
+                  <font>
+                     <Font name="Times New Roman" size="32.0" />
+                  </font>
+               </Label>
+               <Button fx:id="exitTrait" layoutX="596.0" layoutY="8.0" mnemonicParsing="false" onAction="#switchFromTraits" text="X" />
+            </children>
+         </Pane>
+      </children>
+   </AnchorPane>
+</AnchorPane>
